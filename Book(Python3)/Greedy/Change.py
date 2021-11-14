@@ -1,10 +1,10 @@
 # 거스름돈으로 사용할 500원, 100원, 50원, 10원 동전이 무한히 존재한다.
 # 손님에게 거슬러 줘야 할 돈이 N원일 때 거슬러 줘야 할 동전의 최소 개수는? (N은 10의 배수)
 
-# Mine
+# 풀이: 큰 거스름돈부터 최대한 거슬러 주는 것을 반복한다.
 def changeCoin(N):
     answer = N // 500 + (N % 500 // 100) + (N % 500 % 100 // 50) + (N % 500 % 100 % 50 // 10)
-    return print(answer)
+    return print("나의 답: ", answer)
 
 # Answer Example
 def returnCoin(N):
@@ -13,7 +13,7 @@ def returnCoin(N):
     for coin in coin_types:
         count += N // coin
         N %= coin
-    return print(count)
+    return print("예시답안: ", count)
 
 changeCoin(1260)
 returnCoin(1260)
