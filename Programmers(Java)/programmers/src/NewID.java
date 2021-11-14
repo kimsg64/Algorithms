@@ -54,12 +54,12 @@ public class NewID {
         // 4단계
         if((int)target.charAt(0) == 46 && target.length() == 1) {
             target = "a";
-          } else if((int)target.charAt(0) == 46&& target.length() != 1) {
+        } else if((int)target.charAt(0) == 46 && target.length() != 1) {
             target = target.substring(1);
-          }
-          if((int)target.charAt(target.length()-1) == 46) {
-            target = target.substring(0, target.length()-1);
-          }
+        }
+        if((int)target.charAt(target.length()-1) == 46) {
+          target = target.substring(0, target.length()-1);
+        }
         
         // 5단계
         target = target.replaceAll(" ", "a");
@@ -67,10 +67,6 @@ public class NewID {
         // 6단계
         if(target.length() >= 16) {
         	target = target.substring(0, 15);
-        	
-            if((int)target.charAt(0) == 46) {
-            	target = target.substring(1);
-            }
             if((int)target.charAt(target.length()-1) == 46) {
             	target = target.substring(0, target.length()-1);
             }
