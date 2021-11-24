@@ -19,7 +19,6 @@
           this.state = {
             first: Math.ceil(Math.random() * 9),
             second: Math.ceil(Math.random() * 9),
-            multi: null,
             value: "",
             result: "",
           };
@@ -27,16 +26,17 @@
 
         onSubmit = (e) => {
           e.preventDefault();
-          this.setState({ multi: parseInt(this.state.value) });
           if (
             parseInt(this.state.value) ===
             this.state.first * this.state.second
           ) {
-            this.setState({
-              result: "정답",
-              first: Math.ceil(Math.random() * 9),
-              second: Math.ceil(Math.random() * 9),
-              value: "",
+            this.setState((prevState) => {
+              return {
+                result: "정답: " + prevState.value,
+                first: Math.ceil(Math.random() * 9),
+                second: Math.ceil(Math.random() * 9),
+                value: "",
+              };
             });
           } else {
             this.setState({
@@ -44,10 +44,17 @@
               value: "",
             });
           }
+          this.inputRef.focus();
         };
 
         onChange = (e) => {
           this.setState({ value: e.target.value });
+        };
+
+        inputRef;
+
+        onRefInput = (c) => {
+          this.inputRef = c;
         };
 
         render() {
@@ -58,15 +65,16 @@
               </div>
               <form onSubmit={this.onSubmit}>
                 <input
+                  ref={(c) => {
+                    this.onRefInput;
+                  }}
                   type="number"
                   value={this.state.value}
                   onChange={this.onChange}
                 />
                 <button>입력!</button>
               </form>
-              <div>
-                {this.state.multi} {this.state.result}
-              </div>
+              <div>{this.state.result}</div>
             </React.Fragment>
           );
         }

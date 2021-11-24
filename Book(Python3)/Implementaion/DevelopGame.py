@@ -41,6 +41,7 @@ count = 1
 # 현 방향이 동(1)쪽을 바라보고 있으면 방향 체크는 0>3>2>1
 # 현 방향이 남(2)쪽을 바라보고 있으면 방향 체크는 1>0>3>2
 # 현 방향이 서(3)쪽을 바라보고 있으면 방향 체크는 2>1>0>3
+# 갈 곳이 없는 경우 뒤로 물러서야 함
 time = 0
 while True:
     #####################
@@ -141,4 +142,68 @@ while True:
             d = 3
         else:
             break
+print(count)
+
+
+# Answer Example
+# 일반적으로 방향을 설정해서 이동하는 문제는 dx, dy라는 별도의 리스트를 만들어 방향을 정하면 효과적이다.
+# 또, 파이썬에서 2차원 리스트를 선언할 때는 컴프리헨션을 이용하면 효율적이다.
+
+# n, m 입력받고, 지도 초기화한 후, 현재 위치 및 방향인 x, y, direction 받기
+n, m = map(int, input().split())
+d = [[0]*m for _ in range(n)]
+x, y, direction = map(int, input().split())
+# 현재 좌표 방문완료
+d[x][y] = 1
+# 전체 지도 정보 입력받기(방문 불가 장소 1)
+array = []
+for i in range(n):
+    array.append(list(map(int, input().split())))
+# 동서남북 방향 정의(이를테면, dx[0], dy[0]는 (-1, 0)이므로 서쪽으로 1칸 이동한 것)
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+# 왼쪽으로 회전(함수 밖에서도 사용할 수 있게 direction을 전역으로 선언)하는 함수 선언
+# 서>남>동>북 순으로 회전하므로 -1
+def turn_left():
+    global direction
+    direction -= 1
+    if direction == -1:
+        direction = 3
+# 시뮬레이션 시작
+count = 1
+turn_time = 0
+while True:
+    #####################
+    time += 1
+    print("맵 체킹:" + str(time) + "회 이동")
+    for i in mapData:
+        print(i)
+    #####################
+    # 왼쪽으로 먼저 회전하고 nx, ny를 원래 자리(x, y)에서 dx[direction]만큼 이동시킬 준비
+    turn_left()
+    nx = x + dx[direction]
+    ny = y + dy[direction]
+    # 준비가 끝나면, 해당 방향에 가보지 않은 칸이 존재할 경우 이동
+    if d[nx][ny] == 0 and array[nx][ny] == 0:
+        d[nx][ny] = 1
+        x = nx
+        y = ny
+        count += 1
+        turn_time = 0
+        continue
+    # 못가면 회전하고 turn_time +1
+    else:
+        turn_time += 1
+    # 네 방향 모두 못 가는 경우
+    if turn_time == 4:
+        nx = x - dx[direction]
+        ny = y - dy[direction]
+        # 뒤로 갈 수 있는 경우 뒤로 가기
+        if array[nx][ny] == 0:
+            x = nx
+            y = ny
+        # 뒤도 막혀 있는 경우
+        else:
+            break
+        turn_time = 0
 print(count)
