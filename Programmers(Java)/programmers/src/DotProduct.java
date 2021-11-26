@@ -7,6 +7,7 @@
 a, b의 길이는 1 이상 1,000 이하입니다.
 a, b의 모든 수는 -1,000 이상 1,000 이하입니다.
 
+<풀이> 시키는대로 풀면 됩니다.
 */
 public class DotProduct {
     public int solution(int[] a, int[] b) {
