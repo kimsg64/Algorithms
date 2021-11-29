@@ -1,11 +1,12 @@
-import React from "react";
+import React, { Component } from "react";
+import TryClass from "./TryClass";
 
 // 숫자 4개를 겹치지 않고 랜덤하게 뽑는 함수
 function getNumbers() {
   const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const array = [];
   for (let i = 0; i < 4; i++) {
-    const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), i)[0];
+    const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
     array.push(chosen);
   }
   return array;
@@ -17,6 +18,11 @@ class NumberBaseball extends Component {
     value: "",
     answer: getNumbers(),
     tries: [],
+  };
+
+  inputRef;
+  onInputRef = (c) => {
+    this.inputRef = c;
   };
 
   onSubmitForm = (e) => {
@@ -61,18 +67,15 @@ class NumberBaseball extends Component {
           return {
             tries: [
               ...prevState.tries,
-              {
-                try: value,
-                result: `${strike} 스트라이크, ${ball} 볼`,
-              },
+              { try: value, result: `${strike} 스트라이크, ${ball} 볼` },
             ],
           };
         });
       }
     }
+    this.inputRef.focus();
   };
   onChangeInput = (e) => {
-    console.log(this.state.answer);
     this.setState({
       value: e.target.value,
     });
@@ -80,16 +83,22 @@ class NumberBaseball extends Component {
 
   render() {
     const { result, value, tries } = this.state;
+    console.log(this.state.answer);
     return (
       <>
         <h1>{result}</h1>
         <form onSubmit={this.onSubmitForm}>
-          <input maxLength={4} value={value} onChange={this.onChangeInput} />
+          <input
+            maxLength={4}
+            value={value}
+            onChange={this.onChangeInput}
+            ref={this.onInputRef}
+          />
         </form>
         <div>시도: {tries.length}</div>
         <ul>
           {tries.map((v, i) => (
-            <Try key={`${i + 1}차 시도`} tryInfo={v} />
+            <TryClass key={`${i + 1}차 시도`} tryInfo={v} />
           ))}
         </ul>
       </>
