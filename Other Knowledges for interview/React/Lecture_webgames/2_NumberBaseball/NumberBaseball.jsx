@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import Try from "./Try";
 
 // 숫자 4개를 겹치지 않고 랜덤하게 뽑는 함수
 function getNumbers() {
   const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const array = [];
   for (let i = 0; i < 4; i++) {
-    const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), i)[0];
+    const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+    // console.log(chosen);
     array.push(chosen);
   }
   return array;
@@ -16,15 +18,13 @@ const NumberBaseball = () => {
   const [value, setValue] = useState("");
   const [answer, setAnswer] = useState(getNumbers());
   const [tries, setTries] = useState([]);
+  const inputRef = useRef();
 
-  onSubmitForm = (e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault();
     if (value === answer.join("")) {
       setResult("홈런");
-      setTries((prevTries) => [
-        ...prevTries.tries,
-        { try: value, result: "홈런!" },
-      ]);
+      setTries((prevTries) => [...prevTries, { try: value, result: "홈런!" }]);
       alert("게임을 다시 시작합니다...");
       setValue("");
       setAnswer(getNumbers());
@@ -36,7 +36,6 @@ const NumberBaseball = () => {
       if (tries.length >= 9) {
         setResult(`10번 틀려서 실패! 답은 ${answer.join(",")}였습니다~`);
         alert("게임을 다시 시작합니다...");
-        setValue("");
         setAnswer(getNumbers());
         setTries([]);
       } else {
@@ -47,15 +46,17 @@ const NumberBaseball = () => {
             ball += 1;
           }
         }
+        setValue("");
         setTries((prevTries) => [
           ...prevTries,
           { try: value, result: `${strike} 스트라이크, ${ball} 볼` },
         ]);
       }
     }
+    inputRef.current.focus();
   };
-  onChangeInput = (e) => {
-    console.log(answer);
+  console.log(answer);
+  const onChangeInput = (e) => {
     setValue(e.target.value);
   };
 
@@ -63,7 +64,12 @@ const NumberBaseball = () => {
     <>
       <h1>{result}</h1>
       <form onSubmit={onSubmitForm}>
-        <input maxLength={4} value={value} onChange={onChangeInput} />
+        <input
+          maxLength={4}
+          value={value}
+          onChange={onChangeInput}
+          ref={inputRef}
+        />
       </form>
       <div>시도: {tries.length}</div>
       <ul>
