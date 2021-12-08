@@ -4,29 +4,79 @@
 
 import PropTypes from "prop-types";
 import Link from "next/link";
+import { Input, Menu, Row, Col } from "antd";
+import { useState } from "react";
+import styled from "styled-components";
+
+import UserProfile from "./UserProfile";
+import LoginForm from "./LoginForm";
+
+const SearchInput = styled(Input.Search)`
+  vertical-align: middle;
+`;
 
 const AppLayout = ({ children }) => {
+  // 이건 더미 데이터임. 서버 만들면 없앨 예정
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <div>
-      <div>
-        <Link href="/">
-          <a>노드버드</a>
-        </Link>
-        <Link href="/profile">
-          <a>프로필</a>
-        </Link>
-        <Link href="/signup">
-          <a>회원가입</a>
-        </Link>
-      </div>
-      {children}
+      <Menu mode="horizontal">
+        <Menu.Item>
+          <Link href="/">
+            <a>노드버드</a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link href="/profile">
+            <a>프로필</a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <SearchInput enterButton />
+        </Menu.Item>
+        <Menu.Item>
+          <Link href="/signup">
+            <a>회원가입</a>
+          </Link>
+        </Menu.Item>
+      </Menu>
+      {/* 거터는 컬럼들 사이의 간격이다. Col 양쪽에 4px씩 패딩이 생긴다 */}
+      <Row gutter={8}>
+        {/*
+        xs는 모바일, sm은 태블릿, md는 작은 데스크탑이다.
+        아래의 의미는, Col 하나가 모바일 화면을 24/24만큼 사용하고, 작은 데스크탑에서는 6/24를 사용한다는 뜻 
+        아래 친구는, 모바일에서는 Col 하나가 화면 하나를 차지하여 세 페이지가 나올 것이고, 데스크탑에서는 25% 50% 25%로 나눠서 가져갈 것이다.
+        */}
+        <Col xs={24} md={6}>
+          {isLoggedIn ? (
+            <UserProfile setIsLoggedIn={setIsLoggedIn} />
+          ) : (
+            <LoginForm setIsLoggedIn={setIsLoggedIn} />
+          )}
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6}>
+          {/* target _blank를 사용할 때는 rel="noreferrer noopener"을 반드시 써야 보안 위협이 줄어든다. */}
+          {/* 새 창을 열었을 때 어떤 창에서 정보가 들어왔는지가 전달되는데, 이런 정보의 유출을 방지하기 위함(referrer가 이전 창, opener가 새 창) */}
+          <a
+            href="https://kimsg64.github.io/GyuTube/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Made By Kim
+          </a>
+        </Col>
+      </Row>
     </div>
   );
 };
 
 // 타입은 노드인데, 여기서 노드는 return 부에 들어갈 수 있는 모든 것을 의미한다.
 // 타입 스크립트 대용인 듯
-AppLayout.prototype = {
+AppLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
