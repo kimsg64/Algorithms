@@ -1,26 +1,44 @@
 // 페이지가 아닌 컴포넌트는 components 폴더에! (이건 필수는 아님)
 // 넥스트에는 router 기능과 hot-loader 기능까지 포함되어 있어서 Link는 그냥 next에서 가져오면 되고
 // 저장하면 알아서 개발 서버가 핫 리로딩된다
-
-import PropTypes from "prop-types";
+import React from "react";
 import Link from "next/link";
+import PropTypes from "prop-types";
 import { Input, Menu, Row, Col } from "antd";
-import { useState } from "react";
-import styled from "styled-components";
+import { useSelector } from "react-redux";
+import styled, { createGlobalStyle } from "styled-components";
 
-import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
+import UserProfile from "./UserProfile";
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
 
+const Global = createGlobalStyle`
+  .ant-row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .ant-col:first-child {
+    padding-left: 0 !important;
+  }
+
+  .ant-col:last-child {
+    padding-right: 0 !important;
+  }
+`;
+
 const AppLayout = ({ children }) => {
   // 이건 더미 데이터임. 서버 만들면 없앨 예정
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn } = useSelector((state) => state.user);
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  // 위 두 개는 똑같음(성능이 살짝 다르지만 미미하다.)
 
   return (
     <div>
+      <Global />
       <Menu mode="horizontal">
         <Menu.Item>
           <Link href="/">
@@ -49,11 +67,7 @@ const AppLayout = ({ children }) => {
         아래 친구는, 모바일에서는 Col 하나가 화면 하나를 차지하여 세 페이지가 나올 것이고, 데스크탑에서는 25% 50% 25%로 나눠서 가져갈 것이다.
         */}
         <Col xs={24} md={6}>
-          {isLoggedIn ? (
-            <UserProfile setIsLoggedIn={setIsLoggedIn} />
-          ) : (
-            <LoginForm setIsLoggedIn={setIsLoggedIn} />
-          )}
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}
