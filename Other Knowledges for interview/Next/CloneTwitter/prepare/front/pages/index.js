@@ -12,6 +12,7 @@ import PostCard from "../components/PostCard";
 const Home = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
   const { mainPosts } = useSelector((state) => state.post);
+  console.log("rendered!");
   return (
     <AppLayout>
       {isLoggedIn && <PostForm />}

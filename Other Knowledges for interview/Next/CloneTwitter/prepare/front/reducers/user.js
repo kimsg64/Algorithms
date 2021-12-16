@@ -16,6 +16,7 @@ export const logoutAction = () => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOG_IN": {
+      console.log("logged in");
       return {
         ...state,
         isLoggedIn: true,
