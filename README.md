@@ -1,4 +1,4 @@
-# Algorithms-For-Coding-Test
+# Algorithms
 코딩 테스트를 대비한 문제풀이 공간입니다.
 
 ## BAEKJOON
