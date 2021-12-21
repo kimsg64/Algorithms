@@ -32,8 +32,9 @@ const Global = createGlobalStyle`
 
 const AppLayout = ({ children }) => {
   // 이건 더미 데이터임. 서버 만들면 없앨 예정
-  const { isLoggedIn } = useSelector((state) => state.user);
-  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { me } = useSelector((state) => state.user);
+  console.log("me in app layout", me);
+  // const me = useSelector((state) => state.user.me);
   // 위 두 개는 똑같음(성능이 살짝 다르지만 미미하다.)
 
   return (
@@ -67,7 +68,7 @@ const AppLayout = ({ children }) => {
         아래 친구는, 모바일에서는 Col 하나가 화면 하나를 차지하여 세 페이지가 나올 것이고, 데스크탑에서는 25% 50% 25%로 나눠서 가져갈 것이다.
         */}
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}
