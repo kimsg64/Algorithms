@@ -64,7 +64,7 @@ function* unfollow(action) {
   }
 }
 
-function* watchFollow() {
+function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_REQUEST, follow);
 }
 
